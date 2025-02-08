@@ -1,0 +1,288 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>Job Information Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-color: #f8fafc;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            min-height: 120px;
+            transition: all 0.3s ease;
+            resize: vertical;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        #response {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            background: white;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .response-success {
+            border-left: 4px solid #22c55e;
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon i {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: #94a3b8;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading spinner */
+        .loading {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .loading-spinner {
+            width: 2rem;
+            height: 2rem;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .form-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Jobber</h1>
+            <p>Fill in the job details below </p>
+        </div>
+
+        <div class="form-card">
+            <form id="jobForm">
+                <div class="form-group">
+                    <label for="aboutJob">About the Job</label>
+                    <div class="input-icon">
+                        <textarea id="aboutJob" name="aboutJob" placeholder="Describe the key responsibilities and requirements..." required></textarea>
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="aboutCompany">About the Company</label>
+                    <div class="input-icon">
+                        <textarea id="aboutCompany" name="aboutCompany" placeholder="Tell us about your company culture and values..." required></textarea>
+                        <i class="fas fa-building"></i>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="jobDescription">Job Description</label>
+                    <div class="input-icon">
+                        <textarea id="jobDescription" name="jobDescription" placeholder="Provide a detailed description of the role..." required></textarea>
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <span>Submit Information</span>
+                </button>
+            </form>
+
+            <div class="loading">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+        
+        <div id="response"></div>
+    </div>
+
+    <script>
+        document.getElementById('jobForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button');
+            const loadingDiv = document.querySelector('.loading');
+            const responseDiv = document.getElementById('response');
+            
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            loadingDiv.style.display = 'flex';
+            
+            const formData = {
+                about_job: document.getElementById('aboutJob').value,
+                about_company: document.getElementById('aboutCompany').value,
+                job_description: document.getElementById('jobDescription').value
+            };
+            
+            try {
+                const response = await fetch('/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                // Show response
+                responseDiv.style.display = 'block';
+                responseDiv.className = 'response-success';
+                responseDiv.innerHTML = `
+                    <h3 style="color: #22c55e; margin-bottom: 1rem;">Submission Successful!</h3>
+                    <pre style="background: #f8fafc; padding: 1rem; border-radius: 0.5rem; overflow-x: auto;">
+${JSON.stringify(result, null, 2)}</pre>`;
+                
+                // Reset form
+                e.target.reset();
+            } catch (error) {
+                console.error('Error:', error);
+                responseDiv.style.display = 'block';
+                responseDiv.className = 'response-error';
+                responseDiv.innerHTML = `
+                    <h3 style="color: #ef4444; margin-bottom: 1rem;">Error</h3>
+                    <p>An error occurred while submitting the form. Please try again.</p>`;
+            } finally {
+                // Re-enable button and hide loading
+                submitBtn.disabled = false;
+                loadingDiv.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>  

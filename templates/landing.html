@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Resume</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-color: #f8fafc;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 90%;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .upload-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            text-align: center;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .header {
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            color: #64748b;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: #f8fafc;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .selected-file {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background-color: #f8fafc;
+            border-radius: 0.5rem;
+            display: none;
+        }
+
+        .upload-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .upload-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-1px);
+        }
+
+        .upload-btn:active {
+            transform: translateY(0);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .upload-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="upload-card">
+            <div class="header">
+                <h1>Upload Your Resume</h1>
+                <p>Please upload your resume in PDF format to continue</p>
+            </div>
+
+            <form id="uploadForm" action="/upload_pdf" method="post" enctype="multipart/form-data">
+                <div class="upload-area" id="dropZone">
+                    <i class="fas fa-file-upload upload-icon"></i>
+                    <p>Drag and drop your PDF here or click to browse</p>
+                    <input type="file" name="pdf_file" id="fileInput" class="file-input" accept=".pdf">
+                </div>
+                
+                <div id="selectedFile" class="selected-file"></div>
+                
+                <button type="submit" id="uploadBtn" class="upload-btn">
+                    Continue <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const selectedFile = document.getElementById('selectedFile');
+        const uploadBtn = document.getElementById('uploadBtn');
+
+        // Handle drag and drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#2563eb';
+            dropZone.style.backgroundColor = '#f8fafc';
+        });
+
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#e2e8f0';
+            dropZone.style.backgroundColor = 'white';
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#e2e8f0';
+            dropZone.style.backgroundColor = 'white';
+            
+            const files = e.dataTransfer.files;
+            if (files.length) {
+                fileInput.files = files;
+                updateFileInfo();
+            }
+        });
+
+        // Handle click to upload
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', updateFileInfo);
+
+        function updateFileInfo() {
+            const file = fileInput.files[0];
+            if (file) {
+                if (file.type === 'application/pdf') {
+                    selectedFile.style.display = 'block';
+                    selectedFile.innerHTML = `
+                        <i class="fas fa-file-pdf"></i> ${file.name}
+                    `;
+                    uploadBtn.style.display = 'block';
+                } else {
+                    alert('Please upload a PDF file');
+                    fileInput.value = '';
+                    selectedFile.style.display = 'none';
+                    uploadBtn.style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
